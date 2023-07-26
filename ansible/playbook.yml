@@ -1,0 +1,49 @@
+---
+- name: Check all systems are ready
+  hosts: all
+  gather_facts: false
+  become: false
+  tasks:
+    - name: set docker context
+      local_action: shell docker context create "{{ inventory_hostname }}" --docker "host=ssh://ubuntu@{{ ansible_host }}"
+    - name: Wait for system to become reachable
+      ansible.builtin.wait_for_connection:
+
+- name: Setup admin workstation, it is bastion for application servers, so first we update the OS on it, then on the other servers
+  hosts: adm_server
+  become: true
+  vars_files:
+    - vars.yml
+  roles:
+    - osupgrade
+    - docker_install
+    - swarm_init
+    - ufw
+
+- name: Deploy App Servers
+  hosts: app_servers
+  become: true
+  vars_files:
+    - vars.yml
+  roles:
+    - osupgrade
+    - role: docker_install
+      add_nodes_to_swarm: true
+  tasks:
+    - name: make app directories
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory
+        mode: '0755'
+      loop: "{{ app_directories }}"
+
+- name: Post instal task on swarm
+  hosts: adm_server
+  become: true
+  tasks:
+    - name: Set node label
+      community.docker.docker_node:
+        hostname: "{{ hostvars[item].ansible_nodename }}"
+        labels:
+          "host": "{{ item }}"
+      loop:  "{{ groups['app_servers'] }}"

@@ -1,0 +1,12 @@
+{
+  "_1c_server_external_ip_address": {
+    "sensitive": false,
+    "type": "string",
+    "value": "158.160.42.225"
+  },
+  "_1c_server_internal_ip_address": {
+    "sensitive": false,
+    "type": "string",
+    "value": "192.168.0.34"
+  }
+}

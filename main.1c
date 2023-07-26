@@ -1,0 +1,23 @@
+terraform {
+ required_providers {
+  vcd = {
+   source = "vmware/vcd"
+   }
+  }
+ required_version = ">= 1.5"
+}
+
+provider "vcd" {
+ auth_type = "integrated"
+ max_retry_timeout = 10
+ user = "clouder"
+ password = "Ac8beEq2V8LK"
+ org = "Cloud_238801_2"
+ url = "https://one.msk.cloud.mts.ru/api"
+}
+
+resource "vcd_vapp" "vapp" {
+ name = "Servers"
+ org = "Cloud_238801_2"
+ vdc = "Cloud_238801_2_VDC"
+}
