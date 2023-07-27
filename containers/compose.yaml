@@ -1,0 +1,27 @@
+networks:
+  back-tier:
+    driver: overlay
+    attachable: true
+
+volumes:
+  mongodb_data:
+
+services:
+  srv1c:
+    build:
+      context: .
+      dockerfile: srv1c.Dockerfile
+    networks:
+      - back-tier
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.host == app_0
+    environment:
+      - LDAP_DOMAIN=tripleap.ru
+    env_file:
+      - .env
+    volumes:
+      - /opt/docker_final/ldap/data/slapd/database:/var/lib/ldap
+      - /opt/docker_final/ldap/data/slapd/config:/etc/ldap/slapd.d

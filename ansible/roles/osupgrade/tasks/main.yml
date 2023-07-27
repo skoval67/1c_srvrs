@@ -1,9 +1,7 @@
 ---
 # tasks file for osupgrade
 - name: Wait for APT Lock
-  shell: |
-    while sudo fuser /var/lib/dpkg/{{ lockfilename }} >/dev/null 2>&1; do sleep 5; done;
-    while sudo fuser /var/lib/apt/lists/lock >/dev/null 2>&1; do sleep 5; done;
+  ansible.builtin.import_tasks: common/wait_lock.yml
 
 - name: Update apt repo and cache
   apt:

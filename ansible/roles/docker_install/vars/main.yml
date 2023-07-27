@@ -18,9 +18,3 @@ python_moduls:
   - docker
   - pytest
   - pytest-testinfra
-
-lockfilename:
-  - lock
-  - lock-frontend
-
-add_nodes_to_swarm: false

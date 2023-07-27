@@ -1,8 +1,12 @@
-terraform apply -auto-approve
+main () {
+  terraform apply -auto-approve
 
-terraform output -json > ansible/hosts.json
+  terraform output -json > ansible/hosts.json
 
-cd ansible/ && ./gen_inv.py
+  cd ansible/ && ./gen_inv.py
 
-ansible-playbook playbook.yml
-cd ..
+  ansible-playbook playbook.yml
+  cd ..
+}
+
+time main "$@"

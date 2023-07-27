@@ -1,21 +1,37 @@
 ---
-
-registry_host: registry.local.net
-registry_port: 5000
-
 ufw_rules:
   # Set logging
   - logging: "low"
   # Allow OpenSSH
   - rule: allow
     name: OpenSSH
-  # Allow all traffic from internal hosts
+  # Allow L2TP traffic
   - rule: allow
-    from_ip: "192.168.0.0/16"
+    to_port: '1701'
+    proto: udp
+    direction: in
+  - rule: allow
+    to_port: '500'
+    proto: udp
+  - rule: allow
+    to_port: '4500'
+    proto: udp
+  - rule: allow
+    proto: esp
+  - rule: allow
+    proto: ah
 
-app_directories:
-  - /opt/docker_final/ldap/data/slapd/database
-  - /opt/docker_final/ldap/data/slapd/config
-  - /opt/docker_final/gitlab/gitlab_home/config
-  - /opt/docker_final/gitlab/gitlab_home/logs
-  - /opt/docker_final/gitlab/gitlab_home/data
+# vpn-server
+l2tp_ipsec_PSK: vpn
+l2tp_ipsec_server_local_ip: 192.168.40.1
+l2tp_ipsec_server_ip_range: 192.168.40.129-192.168.40.140
+l2tp_ipsec_server_users:
+  - { username: user1, password: password1 }
+  - { username: user2, password: password2 }
+
+# app_directories:
+#   - /opt/docker_final/ldap/data/slapd/database
+#   - /opt/docker_final/ldap/data/slapd/config
+#   - /opt/docker_final/gitlab/gitlab_home/config
+#   - /opt/docker_final/gitlab/gitlab_home/logs
+#   - /opt/docker_final/gitlab/gitlab_home/data

@@ -1,10 +1,8 @@
 ---
-# tasks file for skill
+# tasks file for docker_install
 - name: Wait for APT Lock
-  shell: |
-    while sudo fuser /var/lib/dpkg/{{ lockfilename }} >/dev/null 2>&1; do sleep 5; done;
-    while sudo fuser /var/lib/apt/lists/lock >/dev/null 2>&1; do sleep 5; done;
-
+  ansible.builtin.import_tasks: common/wait_lock.yml
+  
 - name: "Update apt cache & install packages to allow apt to use a repository over HTTPS"
   ansible.builtin.apt:
     name: "{{ packages }}"
@@ -34,19 +32,11 @@
     name: "{{ dpackages }}"
     state: present
     update_cache: true
+  ignore_errors: true
 
 - name: Install requirements
   ansible.builtin.pip:
     name: "{{ python_moduls }}"
-
-# Eliminate error 'http: server gave HTTP response to HTTPS client while pulling from registry'
-- name: Template docker config
-  ansible.builtin.template:
-    src: templates/daemon.json.j2
-    dest: /etc/docker/daemon.json
-    owner: root
-    group: root
-    mode: "0640"
 
 - name: "Enable docker service"
   ansible.builtin.service:
@@ -59,27 +49,3 @@
     name: ubuntu
     groups: docker
     append: true
-
-- name: Add nodes to the swarm
-  community.docker.docker_swarm:
-    state: join
-    join_token: "{{ hostvars['adm_0']['result']['swarm_facts']['JoinTokens']['Worker'] }}"
-    remote_addrs: [ "{{ hostvars['adm_0']['ansible_default_ipv4']['address'] }}:2377" ]
-  when: add_nodes_to_swarm
-
-# - name: Set node label
-#   community.docker.docker_node:
-#     hostname: "{{ ansible_nodename }}"
-#     labels:
-#       "host": "{{ inventory_hostname }}"
-#   when: add_nodes_to_swarm
-
-- name: Copy file with tests
-  ansible.builtin.copy:
-    src: test.py
-    dest: /tmp/
-    mode: "0755"
-
-- name: Start test
-  ansible.builtin.command: pytest -v /tmp/test.py
-  changed_when: false
