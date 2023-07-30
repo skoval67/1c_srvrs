@@ -29,9 +29,7 @@ l2tp_ipsec_server_users:
   - { username: user1, password: password1 }
   - { username: user2, password: password2 }
 
-# app_directories:
-#   - /opt/docker_final/ldap/data/slapd/database
-#   - /opt/docker_final/ldap/data/slapd/config
-#   - /opt/docker_final/gitlab/gitlab_home/config
-#   - /opt/docker_final/gitlab/gitlab_home/logs
-#   - /opt/docker_final/gitlab/gitlab_home/data
+app_directories:
+  - {path: /opt/1C/srv1c, owner: lxd, group: netdev}
+  - {path: /opt/1C/usr1c, owner: lxd, group: netdev}
+  - {path: /opt/1C/pg_data, owner: lxd, group: netdev, mode: "0775"}

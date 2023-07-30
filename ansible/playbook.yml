@@ -4,10 +4,11 @@
   gather_facts: false
   become: false
   tasks:
-    - name: set docker context
-      local_action: shell docker context create "{{ inventory_hostname }}" --docker "host=ssh://ubuntu@{{ ansible_host }}"
     - name: Wait for system to become reachable
       ansible.builtin.wait_for_connection:
+    - name: set docker context
+      local_action: shell docker context create "{{ inventory_hostname }}" --docker "host=ssh://ubuntu@{{ ansible_host }}" && \
+        docker context use "{{ inventory_hostname }}"
 
 - name: Setup 1c server
   hosts: 1c_srvr
@@ -19,10 +20,12 @@
     - osupgrade
     - docker_install
     - l2tp-ipsec-server
-  # tasks:
-  #   - name: make app directories
-  #     ansible.builtin.file:
-  #       path: "{{ item }}"
-  #       state: directory
-  #       mode: '0755'
-  #     loop: "{{ app_directories }}"
+  tasks:
+    - name: make app directories
+      ansible.builtin.file:
+        path: "{{ item.path }}"
+        state: directory
+        owner: "{{ item.owner | default(omit) }}"
+        group: "{{ item.group | default(omit) }}"
+        mode: "{{ item.mode | default('0777') }}"
+      loop: "{{ app_directories }}"

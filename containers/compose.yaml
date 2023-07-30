@@ -1,27 +1,47 @@
 networks:
   back-tier:
-    driver: overlay
-    attachable: true
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24
+#    driver: overlay
+#    attachable: true
 
 volumes:
-  mongodb_data:
+  pg_data:
+  srv1c_home:
+  srv1c_conf:
 
 services:
-  srv1c:
-    build:
-      context: .
-      dockerfile: srv1c.Dockerfile
+  postgresql:
+    image: containers-postgresql
+    # build:
+    #   context: .
+    #   dockerfile: pg.Dockerfile
+    ports:
+      - 5432:5432
+    hostname: pg1c
     networks:
-      - back-tier
-    deploy:
-      replicas: 1
-      placement:
-        constraints:
-          - node.labels.host == app_0
-    environment:
-      - LDAP_DOMAIN=tripleap.ru
-    env_file:
-      - .env
+      back-tier:
+        ipv4_address: 172.20.0.5
     volumes:
-      - /opt/docker_final/ldap/data/slapd/database:/var/lib/ldap
-      - /opt/docker_final/ldap/data/slapd/config:/etc/ldap/slapd.d
+      - pg_data:/var/lib/pgpro/1c-15/data
+
+  server-1c:
+    image: containers-server-1c
+    # build:
+    #   context: .
+    #   dockerfile: srv1c.Dockerfile
+    ports:
+      - 1540-1541:1540-1541
+      - 1560-1591:1560-1591
+    hostname: server1c
+    networks:
+      back-tier:
+        ipv4_address: 172.20.0.3
+    env_file: .env
+    depends_on:
+      - postgresql
+#    restart: always
+    volumes:
+#      - srv1c_home:/home/usr1cv8/.1cv8
+      - srv1c_conf:/opt/1cv8
