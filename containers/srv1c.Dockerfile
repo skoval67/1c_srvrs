@@ -11,15 +11,24 @@ RUN echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula selec
 RUN apt-get install ttf-mscorefonts-installer fontconfig imagemagick curl -y
 
 ADD 8.3.23/*.deb /tmp/
-ADD 1c-entrypoint.sh /
+#ADD 1c-entrypoint.sh /
 
 RUN dpkg -i /tmp/1c-enterprise-${SERVER1C_VERSION}.${REVISION}-common_${SERVER1C_VERSION}-${REVISION}_amd64.deb \
   && dpkg -i /tmp/1c-enterprise-${SERVER1C_VERSION}.${REVISION}-server_${SERVER1C_VERSION}-${REVISION}_amd64.deb \
-  && rm /tmp/*.deb \
-  && chmod +x /1c-entrypoint.sh
+  && rm /tmp/*.deb
+#  && chmod +x /1c-entrypoint.sh
 
 EXPOSE 1540-1541 1560-1591
 
 USER usr1cv8:grp1cv8
 
-ENTRYPOINT /1c-entrypoint.sh
+#ENTRYPOINT /1c-entrypoint.sh
+ENTRYPOINT /opt/1cv8/x86_64/8.3.23.1782/ragent \
+                        -d ${SRV1CV8_DATA} \
+                        -port ${SRV1CV8_PORT} \
+                        -regport ${SRV1CV8_REGPORT} \
+                        -range ${SRV1CV8_RANGE} \
+                        -seclev ${SRV1CV8_SECLEV} \
+                        -pingPeriod ${SRV1CV8_PINGPERIOD} \
+                        -pingTimeout ${SRV1CV8_PINGTIMEOUT} \
+                        $SRV1CV8_DEBUG

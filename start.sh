@@ -12,7 +12,10 @@ main () {
   if [ $? -eq 0 ]
   then
     cd ../containers
-    docker compose up -d --build
+    docker build -t img_server1c -f srv1c.Dockerfile .
+    docker build -t img_pg1c -f pg.Dockerfile .
+    docker compose up -d
+    docker exec containers-postgresql-1 psql -c "alter user postgres with password 'postgres';"
   fi
 }
 

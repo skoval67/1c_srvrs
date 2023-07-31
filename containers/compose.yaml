@@ -3,8 +3,6 @@ networks:
     ipam:
       config:
         - subnet: 172.20.0.0/24
-#    driver: overlay
-#    attachable: true
 
 volumes:
   pg_data:
@@ -13,10 +11,7 @@ volumes:
 
 services:
   postgresql:
-    image: containers-postgresql
-    # build:
-    #   context: .
-    #   dockerfile: pg.Dockerfile
+    image: img_pg1c
     ports:
       - 5432:5432
     hostname: pg1c
@@ -24,13 +19,10 @@ services:
       back-tier:
         ipv4_address: 172.20.0.5
     volumes:
-      - pg_data:/var/lib/pgpro/1c-15/data
+      - pg_data:/var/lib/pgpro/1c-15
 
   server-1c:
-    image: containers-server-1c
-    # build:
-    #   context: .
-    #   dockerfile: srv1c.Dockerfile
+    image: img_server1c
     ports:
       - 1540-1541:1540-1541
       - 1560-1591:1560-1591
@@ -41,7 +33,6 @@ services:
     env_file: .env
     depends_on:
       - postgresql
-#    restart: always
     volumes:
-#      - srv1c_home:/home/usr1cv8/.1cv8
+      - srv1c_home:/home/usr1cv8
       - srv1c_conf:/opt/1cv8

@@ -1,2 +1,2 @@
 [servers_1c]
-1c_srvr ansible_host=62.84.115.148 ansible_user=ubuntu ansible_ssh_private_key=~/.ssh/id_ed25519
+1c_srvr ansible_host=158.160.116.197 ansible_user=ubuntu ansible_ssh_private_key=~/.ssh/id_ed25519
