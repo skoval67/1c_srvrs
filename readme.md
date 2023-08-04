@@ -11,7 +11,7 @@ l2tp_ipsec_PSK: vpn
 и
 ```shell
 l2tp_ipsec_server_users:
-  - { username: user1, password: password1 }
+  - { username: *user1*, password: *password1* }
   - { username: user2, password: password2 }
 ```
 в файле `ansible/vars.yaml` и запустить `./start.sh`
