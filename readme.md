@@ -3,7 +3,7 @@
 ![1C docker postgresql](./1s-foto.png "Развертываем сервер для 1С на docker-контейнерах")
 ---
 ## Развернуть сервер
-Склорировать код себе на компьютер `git clone https://github.com/skoval67/1c_srvrs` <br>
+Склорировать код себе на компьютер `git clone git@github.com:skoval67/1c_srvrs.git` <br>
 Задать значения переменных <br>
 ```shell
 l2tp_ipsec_PSK: vpn
@@ -28,11 +28,11 @@ Set-ItemProperty -Path "HKLM:SYSTEM\CurrentControlSet\Services\PolicyAgent" -Nam
 ```
 Создать VPN-подключение L2TP/IPsec с общим ключом
 ```shell
-Add-VpnConnection -Name "MyVpnName" -ServerAddress 158.160.112.57 -TunnelType L2tp -EncryptionLevel required -AuthenticationMethod MsChapv2 -SplitTunneling -RememberCredential -L2tpPsk vpn -PassThru -Force
+Add-VpnConnection -Name "MyVpnName" -ServerAddress 158.160.112.57 -TunnelType L2tp -EncryptionLevel required -AuthenticationMethod MsChapv2 -SplitTunneling -RememberCredential -L2tpPsk *PreSharedKey* -PassThru -Force
 Add-VpnConnectionRoute -ConnectionName "MyVpnName" -DestinationPrefix "172.20.0.0/16"
 ```
 
 Установить соединение
 ```shell
-rasdial myvpnname user1 password1
+rasdial myvpnname *user1* *password1*
 ```
