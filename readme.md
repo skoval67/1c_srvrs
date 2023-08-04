@@ -35,3 +35,4 @@ Add-VpnConnectionRoute -ConnectionName "MyVpnName" -DestinationPrefix "172.20.0.
 ```
 rasdial myvpnname user1 password1
 ```
+Запустить 1С.
