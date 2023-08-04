@@ -14,7 +14,7 @@ l2tp_ipsec_server_users:
   - { username: user1, password: password1 }
   - { username: user2, password: password2 }
 ```
-в файле `ansible/vars.yaml` и запустить `./start.sh`
+в файле `ansible/vars.yaml` и запустить `./start.sh`. Скрипт развернет виртуальный сервер в облаке, настроит весь необходимый софт на нем и по окончании выведет на экран его IP адрес *_1c_server_external_ip_address*. Его надо подставить вместо *ServerIPAddressOrHostname* в команде `Add-VpnConnection`.
 
 ## Настроить компьютер клиента
 На компьютере клиента добавить строки в файл `\Windows\System32\drivers\etc\hosts`<br>
