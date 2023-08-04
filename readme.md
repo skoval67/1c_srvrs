@@ -3,7 +3,7 @@
 ![1C docker postgresql](./1s-foto.png "Развертываем сервер для 1С на docker-контейнерах")
 ---
 ## Развернуть сервер
-Склорировать код себе на компьютер `git clone git@github.com:skoval67/1c_srvrs.git` <br>
+Склонировать код себе на компьютер `git clone git@github.com:skoval67/1c_srvrs.git` <br>
 Задать PreSharedKey <br>
 ```
 l2tp_ipsec_PSK: vpn
