@@ -2,11 +2,11 @@
   "_1c_server_external_ip_address": {
     "sensitive": false,
     "type": "string",
-    "value": "158.160.119.109"
+    "value": "158.160.111.174"
   },
   "_1c_server_internal_ip_address": {
     "sensitive": false,
     "type": "string",
-    "value": "192.168.0.10"
+    "value": "192.168.0.5"
   }
 }
