@@ -10,7 +10,7 @@ ENV LANG ru_RU.utf8
 RUN echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | debconf-set-selections
 RUN apt-get install ttf-mscorefonts-installer fontconfig imagemagick curl -y
 
-ADD 8.3.23/*.deb /tmp/
+ADD ${SERVER1C_VERSION}/*.deb /tmp/
 
 RUN dpkg -i /tmp/1c-enterprise-${SERVER1C_VERSION}.${REVISION}-common_${SERVER1C_VERSION}-${REVISION}_amd64.deb \
   && dpkg -i /tmp/1c-enterprise-${SERVER1C_VERSION}.${REVISION}-server_${SERVER1C_VERSION}-${REVISION}_amd64.deb \

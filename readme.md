@@ -3,8 +3,18 @@
 ![1C docker postgresql](./1s-foto.png "Развертываем сервер для 1С на docker-контейнерах")
 ---
 ## Развернуть сервер
-Склонировать код себе на компьютер `git clone git@github.com:skoval67/1c_srvrs.git` <br>
-Задать PreSharedKey <br>
+Склонировать код себе на компьютер `git clone git@github.com:skoval67/1c_srvrs.git`. В файле `containers/srv1c.Dockerfile` задать значения переменным
+```
+ENV SERVER1C_VERSION 8.3.23
+ENV REVISION 1782
+```
+создать каталог `containers/${SERVER1C_VERSION}` и положить туда файлы дистрибутивов
+```
+1c-enterprise-${SERVER1C_VERSION}.${REVISION}-common_${SERVER1C_VERSION}-${REVISION}_amd64.deb \
+1c-enterprise-${SERVER1C_VERSION}.${REVISION}-server_${SERVER1C_VERSION}-${REVISION}_amd64.deb
+```
+
+Задать PreSharedKey
 ```
 l2tp_ipsec_PSK: vpn
 ```
@@ -14,7 +24,7 @@ l2tp_ipsec_server_users:
   - { username: user1, password: password1 }
   - { username: user2, password: password2 }
 ```
-в файле `ansible/vars.yaml` и запустить `./start.sh`. Скрипт развернет виртуальный сервер в облаке, настроит весь необходимый софт на нем и по окончании выведет на экран его IP адрес *_1c_server_external_ip_address*. Его надо подставить вместо *ServerIPAddressOrHostname* в команде `Add-VpnConnection`.
+в файле `ansible/vars.yaml` и запустить `./start.sh`. Скрипт развернет виртуальный сервер в облаке, настроит весь необходимый софт на нем и выведет на экран его IP адрес *_1c_server_external_ip_address*. Его надо подставить вместо *ServerIPAddressOrHostname* в команде `Add-VpnConnection` при настройке vpn-соединения на клиенте. Terraform в этом скрипте заточен на работу с Yandex Cloud, поэтому надо соответствено [настроить окружение под него](https://cloud.yandex.ru/docs/tutorials/infrastructure-management/terraform-quickstart).
 
 ## Настроить компьютер клиента
 На компьютере клиента добавить строки в файл `\Windows\System32\drivers\etc\hosts`<br>
